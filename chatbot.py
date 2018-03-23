@@ -8,105 +8,121 @@ import json
 import _thread
 import traceback
 import subprocess
+import urllib
+import urllib.request
 
 
+config = json.load(open('config.json'))
 
-statusEndpoint = {'host': '184.72.15.121', 'port': 6020}
+userID = "26"
 
-
-
-parser = argparse.ArgumentParser(description='start reverse ssh program')
-parser.add_argument('robot_id', help='Robot ID')
-parser.add_argument('--reverse-ssh-host', default='ubuntu@52.52.223.119')
-parser.add_argument('--reverse-ssh-key-file', default='/home/pi/rsjumpbox0.pem')
-
-
+chatEndpoint = {'host': '184.72.15.121', 'port': 8765}
+parser = argparse.ArgumentParser(description='robotstreamer chat bot')
 commandArgs = parser.parse_args()
 
-robotID = commandArgs.robot_id
-
-print("robot id:", robotID)
 
 
 
-def startReverseSSH():
-    print("starting reverse ssh process")
-    returnCode = subprocess.call(["/usr/bin/ssh",
-                                  "-X",
-                                  "-i", commandArgs.reverse_ssh_key_file,
-                                  "-N",
-                                  "-R", "2222:localhost:22",
-                                  commandArgs.reverse_ssh_host])
-    print("return code", returnCode)
+def jsonResponsePOST(url, jsonObject):
 
+    print("json object to POST", jsonObject)
 
-def stopReverseSSH():
-    print("handling stop reverse ssh process")
-    resultCode = subprocess.call(["killall", "ssh"])
-    print("result code of killall ssh:", resultCode)
+    params = json.dumps(jsonObject).encode('utf8')
+    req = urllib.request.Request(url, data=params,
+                             headers={'content-type': 'application/json'})
+    response = urllib.request.urlopen(req)
+
+    jsonResponse = json.loads(response.read())
+    
+    print("response:", jsonResponse)
+   
+    return jsonResponse
+    
 
     
+        
 async def handleStatusMessages():
+
+    global mainWebsocket
 
     print("running handle status messages")
 
-    url = 'ws://%s:%s' % (statusEndpoint['host'], statusEndpoint['port'])
+    url = 'ws://%s:%s' % (chatEndpoint['host'], chatEndpoint['port'])
     print("chat url:", url)
 
     async with websockets.connect(url) as websocket:
 
-        print("connected to control service at", url)
+        mainWebsocket = websocket
+    
+        print("connected to service at", url)
         print("chat websocket object:", websocket)
 
         print("starting websocket.send")
-        await websocket.send(json.dumps({"type":"connect",
-                                         "robot_id":robotID,
-                                         "local_address":subprocess.check_output(["hostname", "-I"]).decode("utf-8").strip()}))
+        #await websocket.send(json.dumps({"type":"connect",
+        #                                 "robot_id":1,
+        #                                 "local_address":"1"}))
 
         while True:
 
-            print("awaiting message")
-            
+            print("awaiting message, this is optional (Ctrl-Break in Windows to Break)")
             message = await websocket.recv()
             print("received message:", message)
-            j = json.loads(message)
-            print("json message:", j)
-
-            if 'type' in j:
-                t = j['type']
-                if t == "start_reverse_ssh":
-                        _thread.start_new_thread(startReverseSSH, ())
-                elif t == "stop_reverse_ssh":
-                        _thread.start_new_thread(stopReverseSSH, ())
-                        
-            else:
-                    print("invalid message:", j)
             
 
 
 
+async def handleUpdateMessages():                
+    
+    global mainWebsocket
+    count = 0
+    print("start update")
+    while True:
+            time.sleep(2)
+            print("sending")
+            j = jsonResponsePOST("http://robotstreamer.com:6001/v1/get_goal_funbits", {"user_id":userID})
+            goalAmount = j['goal_funbits']
+            m = "RS Project Life " + str(int(goalAmount)) + " of " + "3225 funbits for today"
+            if count % 2 == 0:
+                m = m + " "
+            print("message to send:", m)
+            await mainWebsocket.send(json.dumps({"message": m,
+                                                                     "token": config['jwt_user_token']}))
+            count += 1
+            time.sleep(60*5)
+                
+            
+            
+            
 def startStatus():
-        time.sleep(2) #todo: only wait as needed (wait for interenet)
-        print("restarting loop")
-
-
-        
+        print("starting status")
         try:
                 asyncio.new_event_loop().run_until_complete(handleStatusMessages())
         except:
                 print("error")
                 traceback.print_exc()
 
-
+                
+def startUpdateMessages():
+        print("starting status")
+        try:
+                asyncio.new_event_loop().run_until_complete(handleUpdateMessages())
+        except:
+                print("error")
+                traceback.print_exc()
                 
 
-        
-def main():                
-                       
-            print(commandArgs)
-            print("starting")
-            startStatus()
 
+
+def main():                
+
+    print(commandArgs)
+    print("starting chat bot")
+    _thread.start_new_thread(startStatus, ())
+    _thread.start_new_thread(startUpdateMessages, ())
+    
+    # wait forever
+    while True:
+        time.sleep(5)
 
                 
 if __name__ == '__main__':
