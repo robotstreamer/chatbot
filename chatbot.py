@@ -81,7 +81,7 @@ async def handleUpdateMessages():
             print("sending")
             j = jsonResponsePOST("http://robotstreamer.com:6001/v1/get_goal_funbits", {"user_id":userID})
             goalAmount = j['goal_funbits']
-            m = "RS Project Life " + str(int(goalAmount)) + " of " + "3225 funbits for today"
+            m = "RS Project Life " + str(int(goalAmount)) + " of " + "3225 funbits for today. If we meet this daily, robotstreamer stays alive."
             if count % 2 == 0:
                 m = m + " "
             print("message to send:", m)
