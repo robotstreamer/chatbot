@@ -15,6 +15,7 @@ import urllib.request
 config = json.load(open('config.json'))
 
 userID = "26"
+requiredAmount = 3225
 
 chatEndpoint = {'host': '184.72.15.121', 'port': 8765}
 parser = argparse.ArgumentParser(description='robotstreamer chat bot')
@@ -81,14 +82,24 @@ async def handleUpdateMessages():
             print("sending")
             j = jsonResponsePOST("http://robotstreamer.com:6001/v1/get_goal_funbits", {"user_id":userID})
             goalAmount = j['goal_funbits']
-            m = "RS Project Life " + str(int(goalAmount)) + " of " + "3225 funbits for today. If we meet this daily, robotstreamer stays alive."
+
+            if goalAmount > requiredAmount:
+                goalMetText = " Goal met. NICE."
+                delay = 60 * 5
+            else:
+                goalMetText = ""
+                delay = 60 * 5 * 10
+
+            print("delay:", delay)
+                
+            m = "RS Project Life " + str(int(goalAmount)) + " of " + str(requiredAmount) + " funbits for today. If we meet this daily, robotstreamer stays alive. " + goalMetText
             if count % 2 == 0:
                 m = m + " "
             print("message to send:", m)
             await mainWebsocket.send(json.dumps({"message": m,
                                                                      "token": config['jwt_user_token']}))
             count += 1
-            time.sleep(60*5)
+            time.sleep(delay)
                 
             
             
