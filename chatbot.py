@@ -84,10 +84,10 @@ async def handleUpdateMessages():
 
             if goalAmount > requiredAmount:
                 goalMetText = " Goal met. NICE."
-                delay = 59 * 5 * 10
+                delay = 59 * 55
             else:
                 goalMetText = ""
-                delay = 59 * 5
+                delay = 59 * 14
 
             print("delay:", delay)
                 
@@ -102,16 +102,14 @@ async def handleUpdateMessages():
 
             
 
-async def handleAdMessages():                
+async def handleAdMessage(m, delay):                
 
     global mainWebsocket
     count = 0
     print("start update")
-    delay = 60 * 30
     while True:
-            time.sleep(2)
+            time.sleep(delay / 50.0)
                 
-            m = "HeidiCast! Wednesday March 28 at 7:30PM Pacific Time"
             if count % 2 == 0:
                 m = m + " "
             print("message to send:", m)
@@ -124,9 +122,9 @@ async def handleAdMessages():
             
             
             
-def start(fn):
+def start(fn, params):
         try:
-                asyncio.new_event_loop().run_until_complete(fn())
+                asyncio.new_event_loop().run_until_complete(fn(*params))
         except:
                 print("error")
                 traceback.print_exc()
@@ -137,9 +135,10 @@ def main():
     print(commandArgs)
     print("starting threads")
     
-    _thread.start_new_thread(start, (handleStatusMessages,))
-    _thread.start_new_thread(start, (handleUpdateMessages,))
-    _thread.start_new_thread(start, (handleAdMessages,))
+    _thread.start_new_thread(start, (handleStatusMessages, ()))
+    _thread.start_new_thread(start, (handleUpdateMessages, ()))
+    _thread.start_new_thread(start, (handleAdMessage, ("HeidiCast! Wednesday March 28 at 7:30PM Pacific Time", 60 * 37)))
+    _thread.start_new_thread(start, (handleAdMessage, ("Join us on Discord https://discord.gg/n6B7ymy", 60 * 47.5)))
     
     # wait forever
     while True:
