@@ -71,9 +71,8 @@ async def handleStatusMessages():
             
 
 
-
 async def handleUpdateMessages():                
-    
+
     global mainWebsocket
     count = 0
     print("start update")
@@ -100,36 +99,47 @@ async def handleUpdateMessages():
                                                                      "token": config['jwt_user_token']}))
             count += 1
             time.sleep(delay)
+
+            
+
+async def handleAdMessages():                
+
+    global mainWebsocket
+    count = 0
+    print("start update")
+    delay = 60
+    while True:
+            time.sleep(2)
                 
+            m = "HeidiCast! Wednesday March 28 at 7:30PM Pacific Time"
+            if count % 2 == 0:
+                m = m + " "
+            print("message to send:", m)
+            await mainWebsocket.send(json.dumps({"message": m,
+                                                                     "token": config['jwt_user_token']}))
+            count += 1
+            time.sleep(delay)
+            
+
             
             
             
-def startStatus():
-        print("starting status")
+def start(fn):
         try:
-                asyncio.new_event_loop().run_until_complete(handleStatusMessages())
+                asyncio.new_event_loop().run_until_complete(fn())
         except:
                 print("error")
                 traceback.print_exc()
-
-                
-def startUpdateMessages():
-        print("starting status")
-        try:
-                asyncio.new_event_loop().run_until_complete(handleUpdateMessages())
-        except:
-                print("error")
-                traceback.print_exc()
-                
-
 
 
 def main():                
 
     print(commandArgs)
-    print("starting chat bot")
-    _thread.start_new_thread(startStatus, ())
-    _thread.start_new_thread(startUpdateMessages, ())
+    print("starting threads")
+    
+    _thread.start_new_thread(start, (handleStatusMessages,))
+    _thread.start_new_thread(start, (handleUpdateMessages,))
+    _thread.start_new_thread(start, (handleAdMessages,))
     
     # wait forever
     while True:
