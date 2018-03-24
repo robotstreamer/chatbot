@@ -84,10 +84,10 @@ async def handleUpdateMessages():
 
             if goalAmount > requiredAmount:
                 goalMetText = " Goal met. NICE."
-                delay = 60 * 5
+                delay = 59 * 5 * 10
             else:
                 goalMetText = ""
-                delay = 60 * 5 * 10
+                delay = 59 * 5
 
             print("delay:", delay)
                 
@@ -107,7 +107,7 @@ async def handleAdMessages():
     global mainWebsocket
     count = 0
     print("start update")
-    delay = 60
+    delay = 60 * 30
     while True:
             time.sleep(2)
                 
