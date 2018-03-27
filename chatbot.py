@@ -40,6 +40,12 @@ def jsonResponsePOST(url, jsonObject):
     return jsonResponse
     
 
+async def handleStatusMessagesWithRetry():
+
+    while True:
+        await handleStatusMessages()
+        time.sleep(1)
+
     
         
 async def handleStatusMessages():
@@ -64,10 +70,9 @@ async def handleStatusMessages():
         #                                 "local_address":"1"}))
 
         while True:
-
-            print("awaiting message, this is optional (Ctrl-Break in Windows to Break)")
-            message = await websocket.recv()
-            print("received message:", message)
+            time.sleep(1)
+        #    message = await websocket.recv()
+        #    print("received message:", message)
             
 
 
@@ -137,8 +142,8 @@ def main():
     
     _thread.start_new_thread(start, (handleStatusMessages, ()))
     _thread.start_new_thread(start, (handleUpdateMessages, ()))
-    _thread.start_new_thread(start, (handleAdMessage, ("HeidiCast! Wednesday March 28 at 7:30PM Pacific Time", 60 * 37)))
-    _thread.start_new_thread(start, (handleAdMessage, ("Join us on Discord https://discord.gg/n6B7ymy", 60 * 47.5)))
+    _thread.start_new_thread(start, (handleAdMessage, ("RESCHEDULED HeidiCast! Wednesday April 4 at 7:30PM Pacific Time", 60 * 50)))
+    _thread.start_new_thread(start, (handleAdMessage, ("Join us on Discord https://discord.gg/n6B7ymy", 60 * 56)))
     
     # wait forever
     while True:

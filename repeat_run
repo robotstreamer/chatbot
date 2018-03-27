@@ -1,0 +1,6 @@
+while :
+do
+echo running $@
+$@
+sleep 1
+done

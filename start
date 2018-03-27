@@ -1,1 +1,1 @@
-nohup python3 chatbot.py &> /dev/null &
+nohup python3 -u chatbot.py &> /tmp/chatbot &
