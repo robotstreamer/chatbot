@@ -76,6 +76,14 @@ async def handleStatusMessages():
             
 
 
+
+async def handleUpdateMessagesWithRetry():
+
+    while True:
+        await handleUpdateMessages()
+        time.sleep(1)
+        
+        
 async def handleUpdateMessages():                
 
     global mainWebsocket
@@ -106,7 +114,13 @@ async def handleUpdateMessages():
             time.sleep(delay)
 
             
+async def handleAdMessageWithRetry(m, delay):
 
+    while True:
+        await handleAdMessage(m, delay)
+        time.sleep(1)
+            
+            
 async def handleAdMessage(m, delay):                
 
     global mainWebsocket
@@ -119,7 +133,7 @@ async def handleAdMessage(m, delay):
                 m = m + " "
             print("message to send:", m)
             await mainWebsocket.send(json.dumps({"message": m,
-                                                                     "token": config['jwt_user_token']}))
+                                                 "token": config['jwt_user_token']}))
             count += 1
             time.sleep(delay)
             
@@ -140,10 +154,10 @@ def main():
     print(commandArgs)
     print("starting threads")
     
-    _thread.start_new_thread(start, (handleStatusMessages, ()))
-    _thread.start_new_thread(start, (handleUpdateMessages, ()))
-    _thread.start_new_thread(start, (handleAdMessage, ("RESCHEDULED HeidiCast! Wednesday April 4 at 7:30PM Pacific Time", 60 * 50)))
-    _thread.start_new_thread(start, (handleAdMessage, ("Join us on Discord https://discord.gg/n6B7ymy", 60 * 56)))
+    _thread.start_new_thread(start, (handleStatusMessagesWithRetry, ()))
+    _thread.start_new_thread(start, (handleUpdateMessagesWithRetry, ()))
+    _thread.start_new_thread(start, (handleAdMessageWithRetry, ("RESCHEDULED HeidiCast! Wednesday April 4 at 7:30PM Pacific Time", 60 * 50)))
+    _thread.start_new_thread(start, (handleAdMessageWithRetry, ("Join us on Discord https://discord.gg/n6B7ymy", 60 * 56)))
     
     # wait forever
     while True:
