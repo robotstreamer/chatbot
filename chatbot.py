@@ -21,6 +21,26 @@ chatEndpoint = {'host': '184.72.15.121', 'port': 8765}
 parser = argparse.ArgumentParser(description='robotstreamer chat bot')
 commandArgs = parser.parse_args()
 
+#sendFailed = False
+mainWebsocket = None
+
+
+async def sendWithCheck(message):
+
+    global mainWebsocket
+
+    print("send with check:", message)
+    
+    if mainWebsocket is not None:
+            print("about to make the raw send")
+            await mainWebsocket.send(message)
+            print("finished making the raw send")
+    else:
+            print("send failed because main web socket is not initialized yet")
+
+
+
+ 
 
 
 
@@ -43,7 +63,10 @@ def jsonResponsePOST(url, jsonObject):
 async def handleStatusMessagesWithRetry():
 
     while True:
-        await handleStatusMessages()
+        try:
+            await handleStatusMessages()
+        except Exception as e:
+            print("cound not handle the message, will retry")
         time.sleep(1)
 
     
@@ -51,7 +74,8 @@ async def handleStatusMessagesWithRetry():
 async def handleStatusMessages():
 
     global mainWebsocket
-
+    #global sendFailed
+    
     print("running handle status messages")
 
     url = 'ws://%s:%s' % (chatEndpoint['host'], chatEndpoint['port'])
@@ -69,8 +93,19 @@ async def handleStatusMessages():
         #                                 "robot_id":1,
         #                                 "local_address":"1"}))
 
+        secondCount = 0
+        
         while True:
             time.sleep(1)
+            secondCount += 1
+            if secondCount > 60 * 10:
+                print("automatically reconnecting")
+                return
+            #if sendFailed:
+            #    print("send failed, returning")
+            #    sendFailed = False
+            #    return
+            
         #    message = await websocket.recv()
         #    print("received message:", message)
             
@@ -108,8 +143,8 @@ async def handleUpdateMessages():
             if count % 2 == 0:
                 m = m + " "
             print("message to send:", m)
-            await mainWebsocket.send(json.dumps({"message": m,
-                                                                     "token": config['jwt_user_token']}))
+            await sendWithCheck(json.dumps({"message": m,
+                                            "token": config['jwt_user_token']}))
             count += 1
             time.sleep(delay)
 
@@ -132,7 +167,7 @@ async def handleAdMessage(m, delay):
             if count % 2 == 0:
                 m = m + " "
             print("message to send:", m)
-            await mainWebsocket.send(json.dumps({"message": m,
+            await sendWithCheck(json.dumps({"message": m,
                                                  "token": config['jwt_user_token']}))
             count += 1
             time.sleep(delay)
