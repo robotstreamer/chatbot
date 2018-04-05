@@ -8,7 +8,7 @@ localStorage.getItem('robotstreamer_token');
 
 (3) The ouput with be a token in quotes, copy it.
 
-(5) git clone https://github.com/robotstreamer/chatbot
+(5) git clone https://github.com/robotstreamer/chatbot.git
 
 (4) In the chatbot folder, create a config.json file.
 Contends of the file should be this:
