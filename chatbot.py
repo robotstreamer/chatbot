@@ -168,7 +168,7 @@ async def handleAdMessage(m, delay):
                 m = m + " "
             print("message to send:", m)
             await sendWithCheck(json.dumps({"message": m,
-                                                 "token": config['jwt_user_token']}))
+                                                 "token": config['jwt_user_token'], "robot_id":100}))
             count += 1
             time.sleep(delay)
             
