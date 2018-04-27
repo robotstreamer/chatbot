@@ -19,6 +19,7 @@ requiredAmount = 3225
 
 chatEndpoint = {'host': '184.72.15.121', 'port': 8765}
 parser = argparse.ArgumentParser(description='robotstreamer chat bot')
+parser.add_argument('robot_id')
 commandArgs = parser.parse_args()
 
 #sendFailed = False
@@ -168,7 +169,7 @@ async def handleAdMessage(m, delay):
                 m = m + " "
             print("message to send:", m)
             await sendWithCheck(json.dumps({"message": m,
-                                                 "token": config['jwt_user_token']}))
+                                                 "token": config['jwt_user_token'], "robot_id": commandArgs.robot_id}))
             count += 1
             time.sleep(delay)
             
