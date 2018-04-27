@@ -132,10 +132,10 @@ async def handleUpdateMessages():
 
             if goalAmount > requiredAmount:
                 goalMetText = " Goal met. NICE."
-                delay = 59 * 55
+                delay = 59 * 110
             else:
                 goalMetText = ""
-                delay = 59 * 14
+                delay = 59 * 28
 
             print("delay:", delay)
                 
@@ -190,10 +190,12 @@ def main():
     print("starting threads")
     
     _thread.start_new_thread(start, (handleStatusMessagesWithRetry, ()))
-    _thread.start_new_thread(start, (handleUpdateMessagesWithRetry, ()))
-    _thread.start_new_thread(start, (handleAdMessageWithRetry, ("RESCHEDULED HeidiCast! Wednesday April 4 at 7:30PM Pacific Time", 60 * 50)))
-    _thread.start_new_thread(start, (handleAdMessageWithRetry, ("Join us on Discord https://discord.gg/n6B7ymy", 60 * 56)))
-    
+    #_thread.start_new_thread(start, (handleUpdateMessagesWithRetry, ()))
+    _thread.start_new_thread(start, (handleAdMessageWithRetry, ("RickCast Sat 4PM Pacific Time", 60 * 100)))
+    _thread.start_new_thread(start, (handleAdMessageWithRetry, ("Join us on Discord https://discord.gg/n6B7ymy", 60 * 110)))
+    _thread.start_new_thread(start, (handleAdMessageWithRetry, ("Want to help the site out? Buying funbits is a great way to donate. Thanks to those that have already!", 60 * 120)))
+    _thread.start_new_thread(start, (handleAdMessageWithRetry, ("RobotStreamer all hands Meeting: Sunday 4PM PST. Using Google Hangouts. Check Discord for Details.", 60 * 130)))
+
     # wait forever
     while True:
         time.sleep(5)
