@@ -17,7 +17,7 @@ config = json.load(open('config.json'))
 userID = "26"
 requiredAmount = 3225
 
-chatEndpoint = {'host': '184.72.15.121', 'port': 8765}
+chatEndpoint = {'host': 'robotstreamer.com', 'port': 8765}
 parser = argparse.ArgumentParser(description='robotstreamer chat bot')
 parser.add_argument('robot_id')
 commandArgs = parser.parse_args()
@@ -163,7 +163,7 @@ async def handleAdMessage(m, delay):
     count = 0
     print("start update")
     while True:
-            time.sleep(delay / 50.0)
+            time.sleep(delay / 200.0) # first wait is short
                 
             if count % 2 == 0:
                 m = m + " "
@@ -192,10 +192,8 @@ def main():
     
     _thread.start_new_thread(start, (handleStatusMessagesWithRetry, ()))
     #_thread.start_new_thread(start, (handleUpdateMessagesWithRetry, ()))
-    _thread.start_new_thread(start, (handleAdMessageWithRetry, ("RickCast Sat 4PM Pacific Time", 60 * 100)))
-    _thread.start_new_thread(start, (handleAdMessageWithRetry, ("Join us on Discord https://discord.gg/n6B7ymy", 60 * 110)))
-    _thread.start_new_thread(start, (handleAdMessageWithRetry, ("Want to help the site out? Buying funbits is a great way to donate. Thanks to those that have already!", 60 * 120)))
-    _thread.start_new_thread(start, (handleAdMessageWithRetry, ("RobotStreamer all hands Meeting: Sunday 4PM PST. Using Google Hangouts. Check Discord for Details.", 60 * 130)))
+    _thread.start_new_thread(start, (handleAdMessageWithRetry, ("Join us on Discord https://discord.gg/n6B7ymy", 60 * 210)))
+    _thread.start_new_thread(start, (handleAdMessageWithRetry, ("RickCast feat. Heidi, Wed Sept 26th, 6PM Pacific, 9PM Eastern", 50 * 60)))
 
     # wait forever
     while True:
