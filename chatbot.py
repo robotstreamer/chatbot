@@ -14,16 +14,27 @@ import urllib.request
 
 config = json.load(open('config.json'))
 
-userID = "26"
 requiredAmount = 3225
 
 chatEndpoint = {'host': 'robotstreamer.com', 'port': 8765}
 parser = argparse.ArgumentParser(description='robotstreamer chat bot')
 parser.add_argument('robot_id')
+parser.add_argument('user_id')
+parser.add_argument('message')
+
+
+
+
+
 commandArgs = parser.parse_args()
 
 #sendFailed = False
 mainWebsocket = None
+
+userID = commandArgs.user_id
+
+print("user id:", userID)
+print("robot id:", commandArgs.robot_id)
 
 
 async def sendWithCheck(message):
@@ -163,7 +174,7 @@ async def handleAdMessage(m, delay):
     count = 0
     print("start update")
     while True:
-            time.sleep(delay / 200.0) # first wait is short
+            time.sleep(delay / 2000.0) # first wait is short
                 
             if count % 2 == 0:
                 m = m + " "
@@ -192,8 +203,8 @@ def main():
     
     _thread.start_new_thread(start, (handleStatusMessagesWithRetry, ()))
     #_thread.start_new_thread(start, (handleUpdateMessagesWithRetry, ()))
-    _thread.start_new_thread(start, (handleAdMessageWithRetry, ("Join us on Discord https://discord.gg/n6B7ymy", 60 * 210)))
-    _thread.start_new_thread(start, (handleAdMessageWithRetry, ("RickCast feat. Heidi, Wed Sept 26th, 6PM Pacific, 9PM Eastern", 50 * 60)))
+    _thread.start_new_thread(start, (handleAdMessageWithRetry, (commandArgs.message, 200 * 60)))
+    #_thread.start_new_thread(start, (handleAdMessageWithRetry, ("Heidi on RobotStreamer. FOR REAL Sat Sep 29th 4PM PST (7PM Eastern)", 30 * 60)))
 
     # wait forever
     while True:
