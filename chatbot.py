@@ -20,6 +20,7 @@ chatEndpoint = {'host': 'robotstreamer.com', 'port': 8765}
 parser = argparse.ArgumentParser(description='robotstreamer chat bot')
 parser.add_argument('robot_id')
 parser.add_argument('user_id')
+parser.add_argument('interval', type=int)
 parser.add_argument('message')
 
 
@@ -203,7 +204,7 @@ def main():
     
     _thread.start_new_thread(start, (handleStatusMessagesWithRetry, ()))
     #_thread.start_new_thread(start, (handleUpdateMessagesWithRetry, ()))
-    _thread.start_new_thread(start, (handleAdMessageWithRetry, (commandArgs.message, 200 * 60)))
+    _thread.start_new_thread(start, (handleAdMessageWithRetry, (commandArgs.message, commandArgs.interval)))
     #_thread.start_new_thread(start, (handleAdMessageWithRetry, ("Heidi on RobotStreamer. FOR REAL Sat Sep 29th 4PM PST (7PM Eastern)", 30 * 60)))
 
     # wait forever

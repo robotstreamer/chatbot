@@ -1,0 +1,8 @@
+nohup python3 chatbot.py 101 32848 1200 "Heidi & Rick cooking stream 11/9/2018 6:30PM PST" &>/dev/null &
+
+
+
+
+
+
+
