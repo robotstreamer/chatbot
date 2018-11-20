@@ -1,0 +1,8 @@
+nohup python3 chatbot.py 100 32848 3000 "RS Girl Streamer Fans discord https://discord.gg/ecQbKU5" &>/dev/null &
+
+
+
+
+
+
+
