@@ -1,0 +1,9 @@
+nohup python3 chatbot.py 100 32848 200 "settings: soft TTS is free. loud TTS is one funbit (cent)." &>/dev/null &
+
+
+
+
+
+
+
+

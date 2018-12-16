@@ -16,7 +16,7 @@ config = json.load(open('config.json'))
 
 requiredAmount = 3225
 
-chatEndpoint = {'host': 'robotstreamer.com', 'port': 8765}
+chatEndpoint = {'host': '144.202.55.57', 'port': 8765}
 parser = argparse.ArgumentParser(description='robotstreamer chat bot')
 parser.add_argument('robot_id')
 parser.add_argument('user_id')
