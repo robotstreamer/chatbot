@@ -10,13 +10,57 @@ import traceback
 import subprocess
 import urllib
 import urllib.request
+import ssl
 
 
 config = json.load(open('config.json'))
 
 requiredAmount = 3225
 
-chatEndpoint = {'host': '144.202.55.57', 'port': 8765}
+apiHost = "http://api.robotstreamer.com:8080"
+
+
+
+
+def getWithRetry(url, secure=True):
+
+    for retryNumber in range(2000):
+        try:
+            print("GET", url)
+            if secure:
+                object = urllib.request.urlopen(url)
+
+            else:
+                ctx = ssl.create_default_context()
+                ctx.check_hostname = False
+                ctx.verify_mode = ssl.CERT_NONE
+                object = urllib.request.urlopen(url, context=ctx)
+
+
+
+            break
+        except:
+            print("could not open url", url)
+            traceback.print_exc()
+            time.sleep(2)
+
+    data = object.read()
+    encoding = object.info().get_content_charset('utf-8')
+    return data.decode(encoding)
+
+
+
+def getChatHost():
+
+        url = apiHost+'/v1/get_endpoint/rschat/100'
+
+        response = getWithRetry(url, False)
+        print("response:", response)
+        return json.loads(response)
+
+chatEndpoint = getChatHost() #{'host': '144.202.55.57', 'port': 8765}
+
+
 parser = argparse.ArgumentParser(description='robotstreamer chat bot')
 parser.add_argument('robot_id')
 parser.add_argument('user_id')
