@@ -1,0 +1,9 @@
+nohup python3 chatbot2.py 100 32848 300 ".subscribe at rickcast.com" &>/dev/null &
+
+
+
+
+
+
+
+
