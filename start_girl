@@ -1,4 +1,4 @@
-nohup python3 chatbot.py 179 32848 1000 ".RS Girl Streamer Fans discord https://discord.gg/ecQbKU5" &>/dev/null &
+nohup python3 chatbot2.py 179 32848 1000 ".RS Girl Streamer Fans discord https://discord.gg/ecQbKU5" &>/dev/null &
 
 
 
