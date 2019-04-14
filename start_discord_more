@@ -1,4 +1,4 @@
-nohup python3 chatbot.py 100 32848 500 ".Join us on discord https://discord.gg/hRk8xyW" &>/dev/null &
+nohup python3 chatbot2.py 100 32848 500 ".Join us on discord https://discord.gg/hRk8xyW" &>/dev/null &
 
 
 
