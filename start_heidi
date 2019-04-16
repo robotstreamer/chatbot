@@ -1,4 +1,4 @@
-nohup python3 chatbot2.py 100 32848 120 ".Heidi & Rick cleaning stream 4/16/2019 around 5:30PM PST" &>/dev/null &
+nohup python3 chatbot2.py 100 32848 240 ".Heidi & Rick cleaning stream 4/16/2019 around 5:30PM PST" &>/dev/null &
 
 
 
