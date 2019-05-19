@@ -1,4 +1,4 @@
-nohup python3 chatbot2.py 100 32848 600 ".subscribe at twitter.com/rickcastlive" &>/dev/null &
+nohup python3 chatbot2.py 100 32848 600 ".follow on twitter.com/rickcastlive" &>/dev/null &
 
 
 

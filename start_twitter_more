@@ -1,0 +1,9 @@
+nohup python3 chatbot2.py 100 32848 55 ".follow my robots at twitter.com/rickcastlive" &>/dev/null &
+
+
+
+
+
+
+
+

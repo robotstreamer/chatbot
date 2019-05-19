@@ -1,0 +1,8 @@
+nohup python3 chatbot2.py 100 32848 200 ". https://treatstream.com/t/treat/robotstreamer_rick" &>/dev/null &
+
+
+
+
+
+
+

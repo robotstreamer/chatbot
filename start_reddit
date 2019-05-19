@@ -1,4 +1,4 @@
-nohup python3 chatbot2.py 100 32848 400 ". https://reddit.com/r/robotstreamer" &>/dev/null &
+nohup python3 chatbot2.py 100 32848 200 ".robotstreamer subreddit for updates https://reddit.com/r/robotstreamer" &>/dev/null &
 
 
 
