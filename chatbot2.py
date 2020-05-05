@@ -20,6 +20,7 @@ requiredAmount = 3225
 apiHost = "http://api.robotstreamer.com:8080"
 
 
+print("starting")
 
 
 def getWithRetry(url, secure=True):
@@ -52,6 +53,8 @@ def getWithRetry(url, secure=True):
 
 def getChatHost():
 
+        return {'host':'207-148-11-143.robotstreamer.com', 'port':8765}
+    
         url = apiHost+'/v1/get_endpoint/rschat/100'
 
         response = getWithRetry(url, False)
@@ -75,10 +78,22 @@ print("user id:", userID)
 print("robot id:", commandArgs.robot_id)
 
     
-        
+
+async def initiateConnection(websocket):
+		await websocket.send(json.dumps({
+			'type': 'connect',
+			'message': 'joined',
+			'token': config['jwt_user_token'],	#only required on connect
+			'robot_id': commandArgs.robot_id,	#only required on connect
+			'owner_id': commandArgs.user_id 	#only required on connect
+		}))
+
+
+
+
 async def connectAndSendOneMessage():
 
-    url = 'ws://%s:%s' % (chatEndpoint['host'], chatEndpoint['port'])
+    url = 'wss://%s:%s' % (chatEndpoint['host'], chatEndpoint['port'])
     print("chat url:", url)
 
     async with websockets.connect(url) as websocket:
@@ -90,7 +105,8 @@ async def connectAndSendOneMessage():
 
         print("starting websocket.send")
 
-
+        await initiateConnection(websocket)
+        
         await websocket.send(json.dumps({"message": commandArgs.message,
                                          "token": config['jwt_user_token'],
                                          "robot_id": commandArgs.robot_id}))
