@@ -19,5 +19,9 @@ Make sure you replace YOURTEKNGOESHERE with the token you got in step 3.
 
 (5) Now you can start chatbot:
 
-python3 chatbot.py
+python chatbot2.py ROBOTID USERID TIMEINTERVALINSECONDS MESSAGE
+
+For example:
+
+python3 chatbot2.py 100 32848 300 ".this is a message"
 
