@@ -13,11 +13,17 @@ import urllib.request
 import ssl
 
 
+import os, ssl
+
+if (not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(ssl, '_create_unverified_context', None)): ssl._create_default_https_context = ssl._create_unverified_context
+
+
+
 config = json.load(open('config.json'))
 
 requiredAmount = 3225
 
-apiHost = "http://api.robotstreamer.com:8080"
+apiHost = "https://api2.robotstreamer.com"
 
 
 print("starting")
@@ -53,7 +59,7 @@ def getWithRetry(url, secure=True):
 
 def getChatHost():
 
-        return {'host':'207-148-11-143.robotstreamer.com', 'port':8765}
+        return {'host':'144-202-61-34.robotstreamer.com', 'port':8765}
     
         url = apiHost+'/v1/get_endpoint/rschat/100'
 
