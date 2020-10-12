@@ -1,0 +1,2 @@
+nohup python3 chatbot2.py 100 32848 315 ".Join rick's discord https://discord.gg/wnQ8GsZ" &>/dev/null &
+nohup python3 chatbot2.py 100 32848 210 ".Join robotstreamer discord https://discord.gg/hRk8xyW" &>/dev/null &
