@@ -72,13 +72,14 @@ chatEndpoint = getChatHost() #{'host': '144.202.55.57', 'port': 8765}
 
 parser = argparse.ArgumentParser(description='robotstreamer chat bot')
 parser.add_argument('robot_id')
-parser.add_argument('user_id')
+#parser.add_argument('user_id')
 parser.add_argument('interval', type=int)
 parser.add_argument('message')
 
 
 commandArgs = parser.parse_args()
-userID = commandArgs.user_id
+#userID = commandArgs.user_id
+userID = "0" # just a dummy value, it's not used
 
 print("user id:", userID)
 print("robot id:", commandArgs.robot_id)
@@ -91,7 +92,7 @@ async def initiateConnection(websocket):
 			'message': 'joined',
 			'token': config['jwt_user_token'],	#only required on connect
 			'robot_id': commandArgs.robot_id,	#only required on connect
-			'owner_id': commandArgs.user_id 	#only required on connect
+			'owner_id': userID 	#only required on connect
 		}))
 
 
